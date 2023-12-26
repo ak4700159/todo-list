@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/sub_screen/login_screen.dart';
 import 'package:todo_list/sub_screen/splash_screen.dart';
 
 void main() {
