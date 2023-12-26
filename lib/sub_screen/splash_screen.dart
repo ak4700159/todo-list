@@ -17,8 +17,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     print('splash create');
     controller = AnimationController(
-      /// [AnimationController]s can be created with `vsync: this` because of
-      /// [TickerProviderStateMixin].
       vsync: this,
       duration: const Duration(seconds: 5),
     )..addListener(() {
@@ -31,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     controller.dispose();
-    print('splash delete');
     super.dispose();
   }
 
@@ -64,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LoginScreen()),
+                        builder: (context) => const LoginScreen()),
                   );
                 },
                 child: Text(
