@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_list/main_screen/main_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  void login() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogin', true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +78,13 @@ class LoginScreen extends StatelessWidget {
         Expanded(
           flex: 2,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              login();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MainScreen()),
+              );
+            },
             style: const ButtonStyle(
               shape: MaterialStatePropertyAll<ContinuousRectangleBorder?>(
                 ContinuousRectangleBorder(

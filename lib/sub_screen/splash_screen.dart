@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_list/sub_screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_list/login/login_screen.dart';
+import 'package:todo_list/main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,18 +16,42 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController controller;
+  late bool _isLogin;
+
+  Future<bool> checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isLogin = prefs.getBool('isLogin') ?? false;
+    return _isLogin;
+  }
+
+  void moveScreen() async {
+    await checkLogin().then((_isLogin) {
+      if (_isLogin) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => (const MainScreen())),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => (const LoginScreen())),
+        );
+      }
+    });
+  }
 
   @override
   void initState() {
-    print('splash create');
+    super.initState();
     controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 5),
     )..addListener(() {
-        setState(() {});
-      });
+      setState(() {});
+    });
     controller.repeat(reverse: true);
-    super.initState();
+    Timer(const Duration(seconds: 3), ( ){ });
+    moveScreen();
   }
 
   @override
@@ -37,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             border: Border.all(
               width: 3.0,
@@ -52,22 +80,6 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 '로딩중',
                 style: Theme.of(context).textTheme.titleLarge,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shadowColor: Colors.blueAccent,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                  );
-                },
-                child: Text(
-                  '이동하기',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
               ),
               Container(
                 width: 100,
