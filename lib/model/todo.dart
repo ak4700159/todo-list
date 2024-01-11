@@ -8,11 +8,12 @@ class Todo {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'titile': title,
+      'title': title,
       'description': description,
     };
   }
 
+  // fromMap 이라는 이름의 생성자
   Todo.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     title = map['title'];
@@ -41,18 +42,16 @@ class TodoDefault {
     return dumy;
   }
 
-  void addTodo(Todo todo) {
-    dumy.add(Todo(
-      id: dumy.length + 1,
-      title: todo.title,
-      description: todo.description,
-    ));
+  Todo addTodo(Todo todo) {
+    Todo newTodo = Todo(title: todo.title, description: todo.description);
+    dumy.add(newTodo);
+    return newTodo;
   }
 
   void deleteTodo(int id) {
     for(int i = 0; i < dumy.length; i++){
       if(dumy[i].id == id){
-        dumy.remove(i);
+        dumy.removeAt(i);
       }
     }
   }

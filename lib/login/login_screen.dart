@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_list/main_screen/main_screen.dart';
 
@@ -81,8 +82,8 @@ class LoginScreen extends StatelessWidget {
             onPressed: () {
               login();
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainScreen()),
+                context,
+                MaterialPageRoute(builder: (context) => const MainScreen()),
               );
             },
             style: const ButtonStyle(
@@ -130,32 +131,71 @@ class LoginScreen extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('TO-DO LIST APP'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              LoginTools,
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
+    return WillPopScope(
+      onWillPop: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: const SizedBox(
+                  width: 100,
+                  height: 30,
+                  child: Center(
+                    child: Text(
+                      '나가시겠습니까?',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  child: Image.asset(
-                    'assets/tree.jpg',
-                    scale: 6,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('취소'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                    child: const Text("종료"),
+                  ),
+                ],
+              );
+            });
+        return Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('TO-DO LIST APP'),
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                LoginTools,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                    child: Image.asset(
+                      'assets/tree.jpg',
+                      scale: 6,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
