@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Todo {
   late int? id;
   late String title;
   late String description;
+  late DocumentReference? reference;
 
-  Todo({this.id, required this.title, required this.description});
+  Todo({
+    this.id,
+    required this.title,
+    required this.description,
+    this.reference;
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -19,12 +27,26 @@ class Todo {
     title = map['title'];
     description = map['description'];
   }
+  
+  Todo.fromSnapshot(DocumentSnapshot document){
+    Map<String, dynamic> map = document.data() as Map<String, dynamic>;
+    id = map['id'];
+    title = map['title'];
+    description = map['description'];
+    reference = document.reference;
+  }
 }
 
 class TodoDefault {
   List<Todo> dumy = [
-    Todo(id: 1, title: '하윙', description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
-    Todo(id: 2, title: '하윙', description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
+    Todo(
+        id: 1,
+        title: '하윙',
+        description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
+    Todo(
+        id: 2,
+        title: '하윙',
+        description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
     Todo(id: 3, title: '하윙', description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
     Todo(id: 4, title: '하윙', description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
     Todo(id: 5, title: '하윙', description: 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁ'),
@@ -49,16 +71,16 @@ class TodoDefault {
   }
 
   void deleteTodo(int id) {
-    for(int i = 0; i < dumy.length; i++){
-      if(dumy[i].id == id){
+    for (int i = 0; i < dumy.length; i++) {
+      if (dumy[i].id == id) {
         dumy.removeAt(i);
       }
     }
   }
 
-  void updateTodo(Todo todo){
-    for(int i = 0; i < dumy.length; i++){
-      if(dumy[i].id == todo.id){
+  void updateTodo(Todo todo) {
+    for (int i = 0; i < dumy.length; i++) {
+      if (dumy[i].id == todo.id) {
         dumy[i] = todo;
       }
     }

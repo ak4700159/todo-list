@@ -255,7 +255,9 @@ class _MainScreenState extends State<MainScreen> {
                               child: InkWell(
                                 onTap: () {
                                   String title = todos[index].title;
+                                  titleController.text = todos[index].title;
                                   String description = todos[index].description;
+                                  contentController.text = todos[index].description;
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -279,14 +281,10 @@ class _MainScreenState extends State<MainScreen> {
                                                           width: 0.8)),
                                                   child: TextField(
                                                     controller: titleController,
-                                                    decoration: InputDecoration(
+                                                    decoration: const InputDecoration(
                                                       labelText: '제목',
-                                                      hintText:
-                                                          todos[index].title,
+                                                      hintText: '제목을 입력하세요',
                                                     ),
-                                                    onTap: (){
-                                                      titleController.text = todos[index].title;
-                                                    },
                                                     onChanged: (value) {
                                                       value = titleController.text;
                                                       title = value;
@@ -299,21 +297,17 @@ class _MainScreenState extends State<MainScreen> {
                                                   child: TextField(
                                                     controller: contentController,
                                                     maxLines: 8,
-                                                    decoration: InputDecoration(
+                                                    decoration: const InputDecoration(
                                                       border:
-                                                          const OutlineInputBorder(
+                                                          OutlineInputBorder(
                                                         borderSide: BorderSide(
                                                           color: Colors.grey,
                                                           width: 0.8,
                                                         ),
                                                       ),
                                                       labelText: '세부내용',
-                                                      hintText: todos[index]
-                                                          .description,
+                                                      hintText: '세부내용을 입력하세요',
                                                     ),
-                                                    onTap: (){
-                                                      contentController.text = todos[index].description;
-                                                    },
                                                     onChanged: (value) {
                                                       value = contentController.text;
                                                       description = value;
@@ -326,6 +320,10 @@ class _MainScreenState extends State<MainScreen> {
                                           actions: [
                                             TextButton(
                                               onPressed: () async {
+                                                if(title == '' || description == ''){
+                                                  showToast('다시 입력해주세요');
+                                                  return;
+                                                }
                                                 await todoSqlite
                                                     .updateTodo(Todo(
                                                   id: todos[index].id,
@@ -339,7 +337,7 @@ class _MainScreenState extends State<MainScreen> {
                                                 });
                                                 Navigator.pop(context);
                                               },
-                                              child: Text('수정'),
+                                              child: const Text('수정'),
                                             ),
                                             TextButton(
                                               onPressed: () {
